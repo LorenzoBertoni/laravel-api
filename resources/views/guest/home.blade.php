@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="{{asset('css/app.css')}}">
 </head>
 <body>
-    <div class="flex-center position-ref full-height">
+    <div class="admin-actions">
         @if (Route::has('login'))
             <div class="top-right links">
                 @auth
@@ -22,6 +22,7 @@
                 @endauth
             </div>
         @endif
+    </div>
 
     <div id="root">
 
