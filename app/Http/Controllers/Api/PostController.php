@@ -15,7 +15,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::with(['category', 'tags'])->get();
+        $posts = Post::with(['category', 'tags'])->paginate(6);
 
         foreach($posts as $post) {
             if ($post->img_path) {

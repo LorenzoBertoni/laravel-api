@@ -1941,20 +1941,30 @@ __webpack_require__.r(__webpack_exports__);
   name: 'AppMain',
   data: function data() {
     return {
-      posts: []
+      posts: [],
+      isLoading: true,
+      currentPage: null,
+      lastPage: null
     };
   },
   methods: {
-    getPosts: function getPosts() {
+    getPosts: function getPosts(page) {
       var _this = this;
 
-      axios.get('/api/posts').then(function (response) {
-        _this.posts = response.data.result;
+      axios.get('/api/posts', {
+        params: {
+          page: page
+        }
+      }).then(function (response) {
+        _this.posts = response.data.result.data;
+        _this.isLoading = false;
+        _this.currentPage = response.data.result.current_page;
+        _this.lastPage = response.data.result.last_page;
       });
     }
   },
   mounted: function mounted() {
-    this.getPosts();
+    this.getPosts(1);
   }
 });
 
@@ -2032,7 +2042,43 @@ var render = function render() {
   var _vm = this,
       _c = _vm._self._c;
 
-  return _c("main", [_c("h1", [_vm._v("Post:")]), _vm._v(" "), _c("div", {
+  return _c("main", [_c("h1", [_vm._v("Post:")]), _vm._v(" "), _c("nav", [_c("ul", {
+    staticClass: "pagination"
+  }, [_c("li", {
+    staticClass: "page-item",
+    "class": _vm.currentPage == 1 ? "disabled" : ""
+  }, [_c("a", {
+    staticClass: "page-link",
+    attrs: {
+      href: "#"
+    },
+    on: {
+      click: function click($event) {
+        $event.preventDefault();
+        return _vm.getPosts(_vm.currentPage - 1);
+      }
+    }
+  }, [_vm._v("\n                    Previous\n                ")])]), _vm._v(" "), _c("li", {
+    staticClass: "page-item disabled"
+  }, [_c("span", {
+    staticClass: "page-link"
+  }, [_vm._v("\n                    " + _vm._s(_vm.currentPage) + "/" + _vm._s(_vm.lastPage) + "\n                ")])]), _vm._v(" "), _c("li", {
+    staticClass: "page-item",
+    "class": _vm.currentPage == _vm.lastPage ? "disabled" : ""
+  }, [_c("a", {
+    staticClass: "page-link",
+    attrs: {
+      href: "#"
+    },
+    on: {
+      click: function click($event) {
+        $event.preventDefault();
+        return _vm.getPosts(_vm.currentPage + 1);
+      }
+    }
+  }, [_vm._v("\n                    Next\n                ")])])])]), _vm._v(" "), _vm.isLoading ? _c("div", {
+    staticClass: "load-in-progress"
+  }, [_vm._m(0)]) : _c("div", {
     staticClass: "posts"
   }, _vm._l(_vm.posts, function (post, index) {
     return _c("div", {
@@ -2060,13 +2106,25 @@ var render = function render() {
       }, [_vm._v("\n                        " + _vm._s(tag.name) + " |\n                    ")]);
     })], 2) : _c("p", [_vm._v("\n                    Tag: -\n                ")]), _vm._v(" "), _c("p", [_vm._v("\n                    " + _vm._s(post.description) + "    \n                ")]), _vm._v(" "), _c("a", {
       attrs: {
-        href: ""
+        href: "#"
       }
     }, [_vm._v("\n                    Leggi di più\n                ")])])]);
   }), 0)]);
 };
 
-var staticRenderFns = [];
+var staticRenderFns = [function () {
+  var _vm = this,
+      _c = _vm._self._c;
+
+  return _c("div", {
+    staticClass: "spinner-border",
+    attrs: {
+      role: "status"
+    }
+  }, [_c("span", {
+    staticClass: "sr-only"
+  }, [_vm._v("Loading...")])]);
+}];
 render._withStripped = true;
 
 
@@ -2127,7 +2185,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "main[data-v-0390d7df] {\n  width: 70%;\n  margin: 3rem auto;\n}\nmain h1[data-v-0390d7df] {\n  margin-bottom: 2rem;\n  color: #000;\n}\nmain .posts[data-v-0390d7df] {\n  display: flex;\n  flex-flow: row wrap;\n  gap: 1rem;\n}\nmain .posts .card[data-v-0390d7df] {\n  display: flex;\n  flex-direction: column;\n  flex-basis: calc(33.3333333333% - 1rem);\n  height: 500px;\n  border: 1px solid black;\n  border-radius: 0.5rem;\n}\nmain .posts .card .card-img[data-v-0390d7df] {\n  height: 50%;\n}\nmain .posts .card .card-img img[data-v-0390d7df] {\n  width: 100%;\n  height: 100%;\n  -o-object-fit: cover;\n     object-fit: cover;\n  -o-object-position: center;\n     object-position: center;\n}\nmain .posts .card a[data-v-0390d7df] {\n  text-decoration: none;\n}", ""]);
+exports.push([module.i, "main[data-v-0390d7df] {\n  width: 70%;\n  margin: 3rem auto;\n}\nmain h1[data-v-0390d7df] {\n  margin-bottom: 2rem;\n  color: #000;\n}\nmain .load-in-progress[data-v-0390d7df] {\n  width: 100%;\n  height: 100vh;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}\nmain .load-in-progress div[data-v-0390d7df] {\n  width: 150px;\n  height: 150px;\n}\nmain .posts[data-v-0390d7df] {\n  display: flex;\n  flex-flow: row wrap;\n  gap: 1rem;\n}\nmain .posts .card[data-v-0390d7df] {\n  display: flex;\n  flex-direction: column;\n  flex-basis: calc(33.3333333333% - 1rem);\n  height: 500px;\n  border: 1px solid black;\n  border-radius: 0.5rem;\n}\nmain .posts .card .card-img[data-v-0390d7df] {\n  height: 50%;\n}\nmain .posts .card .card-img img[data-v-0390d7df] {\n  width: 100%;\n  height: 100%;\n  -o-object-fit: cover;\n     object-fit: cover;\n  -o-object-position: center;\n     object-position: center;\n}\nmain .posts .card a[data-v-0390d7df] {\n  text-decoration: none;\n}", ""]);
 
 // exports
 
