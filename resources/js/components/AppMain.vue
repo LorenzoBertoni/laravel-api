@@ -101,7 +101,7 @@
                     </p>
 
                     <p>
-                        {{post.description}}    
+                        {{truncateText(post.description, 30)}}    
                     </p>
 
                     <a href="#">
@@ -137,6 +137,13 @@ export default {
                 this.currentPage = response.data.result.current_page;
                 this.lastPage = response.data.result.last_page;
             })
+        },
+        truncateText(text, maxlength) {
+            if (text.length < maxlength) {
+                return text;
+            } else {
+                return text.substring(0, maxlength) + '...';
+            }
         }
     },
     mounted() {

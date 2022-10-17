@@ -1961,6 +1961,13 @@ __webpack_require__.r(__webpack_exports__);
         _this.currentPage = response.data.result.current_page;
         _this.lastPage = response.data.result.last_page;
       });
+    },
+    truncateText: function truncateText(text, maxlength) {
+      if (text.length < maxlength) {
+        return text;
+      } else {
+        return text.substring(0, maxlength) + '...';
+      }
     }
   },
   mounted: function mounted() {
@@ -2104,7 +2111,7 @@ var render = function render() {
       return _c("span", {
         key: index
       }, [_vm._v("\n                        " + _vm._s(tag.name) + " |\n                    ")]);
-    })], 2) : _c("p", [_vm._v("\n                    Tag: -\n                ")]), _vm._v(" "), _c("p", [_vm._v("\n                    " + _vm._s(post.description) + "    \n                ")]), _vm._v(" "), _c("a", {
+    })], 2) : _c("p", [_vm._v("\n                    Tag: -\n                ")]), _vm._v(" "), _c("p", [_vm._v("\n                    " + _vm._s(_vm.truncateText(post.description, 30)) + "    \n                ")]), _vm._v(" "), _c("a", {
       attrs: {
         href: "#"
       }
